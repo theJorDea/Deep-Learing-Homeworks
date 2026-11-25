@@ -1,0 +1,63 @@
+name: Full HW2 notebook experiment
+
+on:
+  push:
+    branches: [hw2-experiment]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: hw2-experiment
+  cancel-in-progress: false
+
+jobs:
+  run-notebook:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    env:
+      OMP_NUM_THREADS: "4"
+      MKL_NUM_THREADS: "4"
+      HF_HUB_DISABLE_TELEMETRY: "1"
+      PYTHONUNBUFFERED: "1"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install notebook runner and CPU PyTorch
+        run: |
+          python -m pip install nbclient nbformat ipykernel
+          python -m pip install --index-url https://download.pytorch.org/whl/cpu torch
+      - name: Execute the notebook and check its results
+        working-directory: hw2
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import nbformat
+          from nbclient import NotebookClient
+
+          source = Path('hw2_nlp.ipynb')
+          nb = nbformat.read(source, as_version=4)
+
+          def completed(cell, cell_index, **_):
+              if cell.cell_type == 'code':
+                  print(f'Completed code cell {cell_index}', flush=True)
+
+          NotebookClient(nb, kernel_name='python3', timeout=5400, on_cell_executed=completed).execute()
+          metrics = json.loads(Path('artifacts/metrics.json').read_text(encoding='utf-8'))
+          assert metrics['fast_mode'] is False
+          assert all(key in metrics['final'] for key in ('f1_micro', 'f1_macro', 'precision', 'recall', 'token_f1', 'per_type'))
+          print(f"Test entity F1: {metrics['final']['f1_micro']:.4f}")
+          nbformat.write(nb, 'hw2_nlp_executed.ipynb')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: hw2-real-run
+          retention-days: 7
+          path: |
+            hw2/hw2_nlp_executed.ipynb
+            hw2/artifacts/metrics.json
