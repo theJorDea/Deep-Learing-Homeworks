@@ -1,0 +1,125 @@
+{
+  "track": "nlp",
+  "model": "cointegrated/rubert-tiny2",
+  "revision": "e8ed3b0c8bbf4fb6984c3de043bf7d2f4e5969ae",
+  "dataset": "Babelscape/wikineural",
+  "classes": [
+    "LOC",
+    "MISC",
+    "ORG",
+    "PER"
+  ],
+  "n_train": 92320,
+  "n_val": 11540,
+  "n_test": 11580,
+  "params_total": 29098929,
+  "baseline": {
+    "majority": {
+      "f1_micro": 0.5843722774656773,
+      "f1_macro": 0.5089478842707436,
+      "precision": 0.6450885454666048,
+      "recall": 0.5341021416803954
+    },
+    "random_head": {
+      "f1_micro": 0.029393424222334538,
+      "f1_macro": 0.028270139891322568,
+      "precision": 0.016691889635223688,
+      "recall": 0.12295442064799561
+    }
+  },
+  "final": {
+    "f1_micro": 0.8607823305907115,
+    "f1_macro": 0.83134267042241,
+    "precision": 0.8517717067892886,
+    "recall": 0.8699856337716875,
+    "token_f1": 0.8734981468659634,
+    "per_type": {
+      "LOC": {
+        "precision": 0.923264736658528,
+        "recall": 0.9238017682643089,
+        "f1-score": 0.9235331743908821,
+        "support": 8596
+      },
+      "MISC": {
+        "precision": 0.7468099395567495,
+        "recall": 0.7508440243079001,
+        "f1-score": 0.7488215488215488,
+        "support": 2962
+      },
+      "ORG": {
+        "precision": 0.7416004886988393,
+        "recall": 0.7958046542117339,
+        "f1-score": 0.7677470355731225,
+        "support": 3051
+      },
+      "PER": {
+        "precision": 0.8678414096916299,
+        "recall": 0.9034107194038407,
+        "f1-score": 0.8852689229040865,
+        "support": 3489
+      }
+    },
+    "validation": {
+      "f1_micro": 0.8600048996924082,
+      "f1_macro": 0.825225289687455,
+      "precision": 0.8526474874507476,
+      "recall": 0.8674903898956617,
+      "token_f1": 0.8699889627022637,
+      "per_type": {
+        "LOC": {
+          "precision": 0.9160382667416995,
+          "recall": 0.9195571121907129,
+          "f1-score": 0.9177943166441137,
+          "support": 8851
+        },
+        "MISC": {
+          "precision": 0.7280865348750466,
+          "recall": 0.7388342165026495,
+          "f1-score": 0.7334210031936876,
+          "support": 2642
+        },
+        "ORG": {
+          "precision": 0.7550877192982456,
+          "recall": 0.7940959409594096,
+          "f1-score": 0.7741007194244603,
+          "support": 2710
+        },
+        "PER": {
+          "precision": 0.8645098516176113,
+          "recall": 0.8869478412777639,
+          "f1-score": 0.8755851194875586,
+          "support": 4007
+        }
+      }
+    }
+  },
+  "ablation": {
+    "setting": "freeze",
+    "full": {
+      "f1_micro": 0.8600048996924082,
+      "f1_macro": 0.825225289687455,
+      "precision": 0.8526474874507476,
+      "recall": 0.8674903898956617,
+      "seconds": 2620.7920324039997,
+      "trainable_parameters": 29098929
+    },
+    "freeze": {
+      "f1_micro": 0.6328598259397402,
+      "f1_macro": 0.5378590214531423,
+      "precision": 0.6105241667942632,
+      "recall": 0.656891817682592,
+      "seconds": 1196.2570680109998,
+      "trainable_parameters": 2817
+    }
+  },
+  "errors": {
+    "correct": 15797,
+    "boundary": 658,
+    "type": 1371,
+    "missed": 384,
+    "spurious": 584
+  },
+  "device": "cpu",
+  "train_time_sec": 2620.7920324039997,
+  "fast_mode": false
+}
